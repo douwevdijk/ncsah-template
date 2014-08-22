@@ -1,0 +1,1 @@
+<?php$to = "douwevdijk@hotmail.com";$subject = "Test mail";$message = "Hello! This is a simple email message.";$from = "douwevdijk@hotmail.com";mail($to,$subject,$message,"From: $from");echo "The email has been sent.";?>

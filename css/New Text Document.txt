@@ -1,0 +1,13 @@
+
+.weather {
+bottom: 0px;
+position: absolute;
+right: 0px;
+width: 400px;
+text-align: right;
+}
+
+.weather img {
+vertical-align: middle;
+width: 60px;
+}

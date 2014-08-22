@@ -1,0 +1,137 @@
+<div style="padding-left: 0px;" class="col-xs-12">
+    <div id="map-canvas"></div>
+    <hr style="float: left; width: 100%;">
+</div>
+
+<div class="contact col-xs-12">
+    <div class="contact col-md-6 col-xs-12" itemscope itemtype="http://schema.org/School" class="one-third column alpha">
+        <div itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+            <ul>
+                <li><span itemprop="streetAddress"><strong>Troelstralaan 2</span>, <span itemprop="postalCode">3843VG</span><span itemprop="addressLocality">, Harderwijk</span>
+                    </strong>
+                </li>
+                <li class="descr_nl">+31 6 23 10 46 58</li>
+                <li><a href="mailto:rianasnel@hotmail.com">rianasnel@hotmail.com</a> / <a href="mailto:horse@arioninharmony.nl">horse@arioninharmony.nl</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <hr class="visible-xs visible-sm" style="float: left; width: 100%;">
+
+    <div class="contact col-md-6 col-xs-12" class="">
+        <div>
+            <div><span><strong>Inschrijven nieuwsbrief</strong></span>
+            </div>
+            <div>
+                <form style="margin-top: 5px;" id="newsletter" class="form-inline" role="form">
+                    <div style="padding-left: 0;" class="form-group col-xs-9">
+                        <input id="newsemail" type="email" name="email" class="required email long form-control" placeholder="Email">
+                        <label id="lblnws" style="position: absolute; display: none; margin-top: 10px; padding: 10px;" class="col-md-12 label label-success">Dank voor uw aanmelding</label>
+                    </div>
+                    <div style="padding-left: 0;" class="form-group col-xs-2">
+                        <input class="btn btn-default submitNewsletter" type="submit" value="Verstuur" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <hr style="float: left; width: 100%;">
+
+    <div style="padding-left: 0; padding-right: 0" class="col-xs-12">
+        <form id="contact-form" class="form-horizontal" role="form">
+            <div class="form-group">
+                <div class="col-md-4">
+                    <input id="name" name="name" type="text" class="required form-control" id="inputName" placeholder="Naam">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-4">
+                    <input id="email" type="email" name="email" class="required email long form-control" id="inputEmail1" placeholder="Email">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-8">
+                    <textarea id="msg" name="msg" tyle="resize: none;" class="required form-control" rows="7" placeholder="Uw bericht"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <div style="margin-left: 0px;" class="col-md-offset-2 col-md-4">
+                    <input class="btn btn-default submitemail" type="submit" value="Verstuur" />
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+<script>
+    $('.submitNewsletter').click(function () {
+        
+        $('#newsletter').validate();
+
+        if ($('#newsletter').valid()) {
+            updateDb();
+        } else {
+
+        }
+    });
+    
+    $('.submitemail').click(function () {
+        $('#contact-form').validate();
+
+        if ($('#contact-form').valid()) {
+            sndmail();
+        } else {
+
+        }
+    });
+
+    function sndmail() {
+
+        var email = $('#email').val();
+        var name = $('#name').val();
+        var message = $('#msg').val();
+
+        $.post('contacts.php', {
+            name: name,
+            email: email,
+            message: message
+        }, function (data) {
+            console.log(data)
+        }).done(function () {});
+
+    }
+    
+    function updateDb() {
+
+        var emailN = $('#newsemail').val();
+        console.log(emailN);
+
+        $.post('/newsletter/samples/subscriber/add.php', {
+            email: emailN,
+			instructeur: 'Riana Snel'
+        }, function (data) {
+            $('#lblnws').fadeIn().delay( 2000 ).fadeOut(); 
+            $('#newsletter')[0].reset()           
+        }).done(function () {});
+
+    }
+    
+    var coords = new google.maps.LatLng(52.338115, 5.641146);
+
+    var mapOptions = {
+        center: coords,
+        zoom: 16,
+        draggable: false
+    };
+
+    map = new google.maps.Map(document.getElementById("map-canvas"),
+        mapOptions);
+
+    var marker = new google.maps.Marker({
+        position: coords,
+        map: map,
+    });
+</script>
